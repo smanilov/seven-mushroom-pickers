@@ -30,7 +30,6 @@ def parse_time(time_string):
 
 
 def fetch_data_for_domain(domain):
-    print('debug: fetching...')
     try:
         url = f'http://archive-api.edoms.com/api/v2/{domain}'
         response = urlopen(url)
@@ -70,6 +69,7 @@ def get_max_inactivity(domain):
     records = get_domain_records(domain)
     first_bad = None
     for record in records:
+<<<<<<< HEAD
         if has_bad_status(record):
             if first_bad is None:
                 first_bad = record
@@ -84,20 +84,17 @@ def get_max_inactivity(domain):
 
     print(f'debug: max inactivity from {best_first.time} to {best_record.time}')
     return best_diff.days
+=======
+        if previous is not None:
+            diff = record.time - previous.time
+            if best_diff is None or diff.days > best_diff.days:
+                best_diff = diff
+                best_previous = previous
+                best_record = record
+        previous = record
+    return best_diff.days if best_diff is not None else 0
+>>>>>>> 9444e76 (wip)
 
-def is_repurp(domain):
-    inactivity = get_max_inactivity(domain)
-    result = False
-    if inactivity > inactivity_thresh:
-        print(f'debug: max inactivity is above threshold: {inactivity} > {inactivity_thresh}')
-        result = True
-    else:
-        print(f'debug: max inactivity is below threshold: {inactivity} < {inactivity_thresh}')
+domain = sys.argv[1]
 
-
-    print(f'debug: domain {domain} has been repurposed: {result}')
-    return result
-
-domain = input('enter domain, plz: ')
-
-print(is_repurp(domain))
+print(get_max_inactivity(domain))

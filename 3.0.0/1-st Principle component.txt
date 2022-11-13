@@ -1,0 +1,32 @@
+No Moz
+
+[('HasEmail', 0.6969903197518755),
+ ('HasPhone', 0.2932627603944121),
+ ('HasAddr', 0.038471648960926974),
+ ('HasGeneric', 0.14914913996779908),
+ ('HasSameD', 0.5920720218250027),
+ ('HasExt', 0.04681108596668343),
+ ('HasInt', 0.1812617554405152),
+ ('HasEdEmail', 0.06550297099007381),
+ ('HasEdName', 0.12047332877811975),
+ ('MissOwner', 0.0),
+ ('Google', 0.008664344926774788)]
+
+The above are the coordinates of the 1-st Principal component vector. This vector lies in an n-dimensional space where each dimension is a feature of the dataset. Each row maps the feature to its corresponding importance to the vector - the greater the absolute value the greater importance this feature has.
+
+Moz
+
+[('HasEmail', 0.003838694827294054), 
+ ('HasPhone', 0.002519941744080434),
+ ('HasAddr', -3.0229743081579014e-05),
+ ('HasGeneric', -0.0015947607090711635),
+ ('HasSameD', 0.006357017659683398),
+ ('HasExt', 0.0011005801173746923),
+ ('HasInt', 0.005272857684352312),
+ ('HasEdEmail', 0.0008404451436952185),
+ ('HasEdName', 0.0026383741263482268),
+ ('MissOwner', 0.0),
+ ('Moz', 0.9999495970991824),
+ ('Google', 0.00028294329033171626)] 
+
+The Moz has by far the most importance in determining the value of the vector. And beyond that in terms of explained variance the first Prinicpal Component explains 99.77% of all variance.

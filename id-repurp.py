@@ -24,6 +24,7 @@ class Record:
         return Record(time, status, size)
 
 domain_to_records = {}
+total_times = {}
 
 def parse_time(time_string):
     return datetime.strptime(time_string, '%Y-%m-%d %H:%M:%S')
@@ -36,6 +37,18 @@ def fetch_data_for_domain(domain):
         raw_response = response.read()
         data_json = json.loads(raw_response)
         records = []
+        first_time = data_json[domain]['header']['first_date']
+        first_time = parse_time(first_time) if first_time is not None else 0
+
+        last_time = data_json[domain]['header']['last_date']
+        last_time = parse_time(last_time) if last_time is not None else 0
+
+        if first_time == 0 or last_time == 0:
+            now = datetime.now()
+            total_times[domain] = now - now
+        else:
+            total_times[domain] = last_time - first_time
+
         for status_change in data_json[domain]['data']:
             for page_change in status_change:
                 only = page_change.get('only')
@@ -69,7 +82,6 @@ def get_max_inactivity(domain):
     records = get_domain_records(domain)
     first_bad = None
     for record in records:
-<<<<<<< HEAD
         if has_bad_status(record):
             if first_bad is None:
                 first_bad = record
@@ -82,19 +94,44 @@ def get_max_inactivity(domain):
         else:
             first_bad = None
 
-    print(f'debug: max inactivity from {best_first.time} to {best_record.time}')
-    return best_diff.days
-=======
+    return best_diff.days if best_diff is not None else 0
+
+# aka downtime
+def get_avg_inactivity(domain):
+    records = get_domain_records(domain)
+    previous = None
+
+    # get some zero accumulator values somehow
+    now = datetime.now()
+    total_up = now - now
+    total_down = now - now
+
+    for record in records:
         if previous is not None:
             diff = record.time - previous.time
-            if best_diff is None or diff.days > best_diff.days:
-                best_diff = diff
-                best_previous = previous
-                best_record = record
+            if has_bad_status(record):
+                total_down += diff
+            else:
+                total_up += diff
         previous = record
-    return best_diff.days if best_diff is not None else 0
->>>>>>> 9444e76 (wip)
+
+    up = total_up.total_seconds()
+    down = total_down.total_seconds()
+    return down / (down + up) if (down + up) > 0 else None
+
+
+def report_results(domain):
+    max_break = get_max_inactivity(domain)
+    lifespan = total_times[domain].days
+    break_part = "%.4f" % (max_break / lifespan) if lifespan > 0 else "-"
+    downtime = get_avg_inactivity(domain)
+    downtime = "%.4f" % downtime if downtime is not None else "-"
+    print(f'{domain}\t\
+            {max_break}\t\
+            {lifespan}\t\
+            {break_part}\t\
+            {downtime}')
+
 
 domain = sys.argv[1]
-
-print(get_max_inactivity(domain))
+report_results(domain)

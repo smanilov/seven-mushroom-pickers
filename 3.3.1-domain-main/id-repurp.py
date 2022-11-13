@@ -126,11 +126,16 @@ def report_results(domain):
     break_part = "%.4f" % (max_break / lifespan) if lifespan > 0 else "-"
     downtime = get_avg_inactivity(domain)
     downtime = "%.4f" % downtime if downtime is not None else "-"
-    print(f'{domain}\t\
-            {max_break}\t\
-            {lifespan}\t\
-            {break_part}\t\
-            {downtime}')
+    print('domain\t' +\
+          'max_break (days)\t' +\
+          'lifespan (days)\t' +\
+          'break_part (fract)\t' +\
+          'downtime (fract)')
+    print(f'{domain}\t' + \
+          f'{max_break}\t' + \
+          f'{lifespan}\t' + \
+          f'{break_part}\t' + \
+          f'{downtime}')
 
 
 domain = sys.argv[1]

@@ -15,8 +15,6 @@
 
 fix: if it's the start of the period, it's not a break
 
-should check registrar, if possible
-
 waybackmachine може да няма много точна информация за размера: виж news.net
 
 как се сравнява с контролна група от сайтове?
@@ -28,3 +26,9 @@ waybackmachine може да няма много точна информация
 щяхме да имаме повече време да поработим върху него.
 
 корелация със "scum score"?
+
+###
+
+next steps:
+ - should check registrar, if possible
+ - should compare content
